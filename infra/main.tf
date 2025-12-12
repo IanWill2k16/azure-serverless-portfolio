@@ -30,14 +30,6 @@ module "functionapp" {
   storage_name        = module.storage.name
   identity_id         = module.identity.id
   storage_access_key  = module.storage.access_key
-  service_plan_id     = module.plan.id
-}
-
-module "plan" {
-  source              = "./modules/app_service_plan"
-  name_prefix         = local.name_prefix
-  location            = var.location
-  resource_group_name = module.rg.name
 }
 
 resource "azurerm_role_assignment" "identity_storage" {
