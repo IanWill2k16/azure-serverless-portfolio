@@ -39,8 +39,8 @@ jobs:
           TF_VAR_oidc_client_id: ${{ secrets.AZURE_CLIENT_ID }}
           TF_VAR_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
           TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        run: TF_LOG=DEBUG terraform -chdir=infra plan -input=false
+        run: terraform -chdir=infra plan
 
-      # - name: Terraform Apply
-      #   if: github.ref == 'refs/heads/main'
-      #   run: terraform -chdir=infra apply -auto-approve
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform -chdir=infra apply -auto-approve
