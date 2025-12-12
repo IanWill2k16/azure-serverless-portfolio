@@ -1,5 +1,5 @@
 resource "azurerm_service_plan" "this" {
-  name                = "${var.name}-fc-plan"
+  name                = "${var.name_prefix}-fc-plan"
   resource_group_name = var.resource_group_name
   location            = var.location
 
@@ -25,5 +25,5 @@ resource "azurerm_function_app_flex_consumption" "func" {
 }
 
 output "url" {
-  value = azurerm_linux_function_app.func.default_hostname
+  value = azurerm_function_app_flex_consumption.func.default_hostname
 }
