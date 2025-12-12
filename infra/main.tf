@@ -30,6 +30,8 @@ module "functionapp" {
   storage_name        = module.storage.name
   identity_id         = module.identity.id
   storage_access_key  = module.storage.access_key
+  storage_blob_endpoint = module.storage.blob_endpoint
+  storage_container   = module.storage.container_name
 }
 
 resource "azurerm_role_assignment" "identity_storage" {
