@@ -28,9 +28,9 @@ module "functionapp" {
   location            = var.location
   resource_group_name = module.rg.name
   storage_name        = module.storage.name
-  identity_id         = module.identity.principal_id
+  identity_id         = module.identity.id
   storage_access_key  = module.storage.access_key
-  app_service_plan_id = module.plan.id
+  service_plan_id     = module.plan.id
 }
 
 module "plan" {
@@ -39,4 +39,12 @@ module "plan" {
   name_prefix         = local.name_prefix
   location            = var.location
   resource_group_name = module.rg.name
+}
+
+resource "azurerm_role_assignment" "identity_storage" {
+  scope                = module.storage.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = module.identity.principal_id
+
+  depends_on = [module.storage]
 }

@@ -7,7 +7,7 @@ resource "azurerm_linux_function_app" "func" {
   storage_account_name       = var.storage_name
   storage_account_access_key = var.storage_access_key
 
-  identity = {
+  identity {
     type = "UserAssigned"
     identity_ids = [var.identity_id]
   }
