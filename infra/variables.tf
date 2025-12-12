@@ -12,3 +12,7 @@ variable "environment" {
   type        = string
   default     = "prod"
 }
+
+variable "oidc_client_id" {}
+variable "tenant_id" {}
+variable "subscription_id" {}
