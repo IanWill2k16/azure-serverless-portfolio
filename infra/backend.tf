@@ -14,16 +14,16 @@ resource "azurerm_storage_account" "tfstate" {
 
 resource "azurerm_storage_container" "tfstate" {
   name                  = "tfstate"
-  storage_account_name  = azurerm_storage_account.tfstate.name
+  storage_account_id  = azurerm_storage_account.tfstate.id
   container_access_type = "private"
 }
 
 output "tfstate_storage_account_name" {
-  value = azurerm_storage_account.tfstate.name
+  value = azurerm_storage_account.tfstate.id
 }
 
 output "tfstate_container_name" {
-  value = azurerm_storage_container.tfstate.name
+  value = azurerm_storage_container.tfstate.id
 }
 
 output "tfstate_rg_name" {
@@ -31,5 +31,10 @@ output "tfstate_rg_name" {
 }
 
 terraform {
-  backend "local" {}
+  backend "azurerm" {
+    resource_group_name  = "cloudportfolio-prod-tfstate-rg"
+    storage_account_name = "cloudportfolioprodtf"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+  }
 }
