@@ -35,7 +35,7 @@ jobs:
         run: terraform -chdir=infra validate
 
       - name: Terraform Plan
-        run: terraform -chdir=infra plan
+        run: TF_LOG=DEBUG terraform -chdir=infra plan -input=false
 
       # - name: Terraform Apply
       #   if: github.ref == 'refs/heads/main'
