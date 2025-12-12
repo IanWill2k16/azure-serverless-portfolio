@@ -13,6 +13,10 @@ jobs:
   terraform:
     name: "Terraform CI/CD"
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_oidc_client_id: ${{ secrets.AZURE_CLIENT_ID }}
+      TF_VAR_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+      TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     steps:
       - name: Checkout
@@ -35,10 +39,6 @@ jobs:
         run: terraform -chdir=infra validate
 
       - name: Terraform Plan
-        env:
-          TF_VAR_oidc_client_id: ${{ secrets.AZURE_CLIENT_ID }}
-          TF_VAR_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         run: terraform -chdir=infra plan
 
       - name: Terraform Apply

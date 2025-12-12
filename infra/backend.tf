@@ -31,10 +31,5 @@ output "tfstate_rg_name" {
 }
 
 terraform {
-  backend "azurerm" {
-    resource_group_name  = "cloudportfolioprod-rg"
-    storage_account_name = "cloudportfolioprodtfstate"
-    container_name       = "tfstate"
-    key                  = "terraform.tfstate"
-  }
+  backend "local" {}
 }
