@@ -5,3 +5,7 @@ output "name" {
 output "static_site_url" {
   value = azurerm_storage_account.sa.primary_web_endpoint
 }
+
+output "access_key" {
+  value = azurerm_storage_account.sa.primary_access_key
+}

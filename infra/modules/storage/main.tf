@@ -7,11 +7,5 @@ resource "azurerm_storage_account" "sa" {
 
   static_website {
     index_document = "index.html"
-    error_404_document = "404.html"
   }
-}
-
-resource "random_integer" "rand" {
-  min = 10000
-  max = 99999
 }
