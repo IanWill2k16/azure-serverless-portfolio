@@ -14,7 +14,7 @@ resource "azurerm_function_app_flex_consumption" "func" {
   service_plan_id     = azurerm_service_plan.this.id
 
   storage_container_type      = "blobContainer"
-  storage_container_endpoint  = "${var.storage_blob_endpoint}${var.storage_container}"
+  storage_container_endpoint  = "${var.storage_blob_endpoint}${var.code_container_name}"
   storage_authentication_type = "StorageAccountConnectionString"
   storage_access_key          = var.storage_access_key
 

@@ -6,6 +6,13 @@ resource "azurerm_storage_account" "sa" {
   account_replication_type = "LRS"
 }
 
+resource "azurerm_storage_container" "code" {
+  name                  = "code"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
+}
+
+
 resource "azurerm_storage_account_static_website" "website" {
   storage_account_id = azurerm_storage_account.sa.id
 
