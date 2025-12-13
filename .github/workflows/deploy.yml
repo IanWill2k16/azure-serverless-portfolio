@@ -60,7 +60,7 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
-            azstorage blob upload-batch \
+            az storage blob upload-batch \
               --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} \
               --destination '$web' \
               --source app/web \
