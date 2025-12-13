@@ -34,7 +34,13 @@ resource "azurerm_function_app_flex_consumption" "func" {
     APPLICATIONINSIGHTS_CONNECTION_STRING = azurerm_application_insights.ai.connection_string
   }
 
-  site_config {}
+  site_config {
+    cors {
+      allowed_origins = [
+        "https://${var.storage_name}.web.core.windows.net"
+      ]
+    }
+  }
 }
 
 output "url" {
