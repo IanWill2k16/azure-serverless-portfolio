@@ -39,7 +39,8 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform Init
-        run: terraform -chdir=infra init
+        run: terraform -chdir=infra init \
+          -backend-config="key=terraform-${{  env.DEPLOY_ENV  }}.tfstate"
 
       - name: Terraform Validate
         run: terraform -chdir=infra validate
