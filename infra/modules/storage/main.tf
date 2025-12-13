@@ -12,6 +12,13 @@ resource "azurerm_storage_container" "code" {
   container_access_type = "private"
 }
 
+data "azurerm_client_config" "current" {}
+
+resource "azurerm_role_assignment" "github_blob" {
+  scope                = azurerm_storage_account.sa.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
 
 resource "azurerm_storage_account_static_website" "website" {
   storage_account_id = azurerm_storage_account.sa.id
@@ -19,4 +26,3 @@ resource "azurerm_storage_account_static_website" "website" {
   index_document = "index.html"
   error_404_document = "404.html"
 }
-
