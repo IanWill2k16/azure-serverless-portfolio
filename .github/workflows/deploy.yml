@@ -111,4 +111,5 @@ jobs:
         uses: Azure/functions-action@v1
         with:
           app-name: cloudportfolio-prod-fn
-          package: app/api
+          package: .
+        working-directory: app/api
