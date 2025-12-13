@@ -8,7 +8,7 @@ resource "azurerm_service_plan" "this" {
 }
 
 resource "azurerm_application_insights" "ai" {
-  name                = "cloudportfolio-prod-ai"
+  name                = "${var.name_prefix}-ai"
   location            = var.location
   resource_group_name = var.resource_group_name
   application_type    = "web"
