@@ -44,3 +44,20 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: terraform -chdir=infra apply -auto-approve
+
+  terraform:
+    name: "Web Page CI/CD"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Upload static site to Azure Storage
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            azstorage blob upload-batch \
+              --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} \
+              --destination '$web' \
+              --source app/web \
+              --overwrite
+
+
