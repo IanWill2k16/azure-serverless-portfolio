@@ -99,14 +99,14 @@ jobs:
       - name: Package Function App
         run: |
           cd app/api
-          zip -r ../../functionapp.zip .
+          zip -r ../../app.zip .
 
       - name: Upload Function Package
         run: |
           az storage blob upload \
             --account-name ${{ needs.terraform.outputs.storage_account_name }} \
             --container-name code \
-            --name functionapp.zip \
-            --file functionapp.zip \
+            --name app.zip \
+            --file app.zip \
             --overwrite \
             --auth-mode login
