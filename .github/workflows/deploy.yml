@@ -2,7 +2,7 @@ name: Deploy Infrastructure
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
 
 permissions:
@@ -13,11 +13,14 @@ env:
   TF_VAR_oidc_client_id: ${{ secrets.AZURE_CLIENT_ID }}
   TF_VAR_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
   TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  DEPLOY_ENV: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
 
 jobs:
   terraform:
     name: "Terraform CI/CD"
     runs-on: ubuntu-latest
+    environment: ${{ github.DEPLOY_ENV }}
+
     outputs:
       storage_account_name: ${{ steps.tf-outputs.outputs.storage_account_name }}
 
@@ -42,11 +45,43 @@ jobs:
         run: terraform -chdir=infra validate
 
       - name: Terraform Plan
-        run: terraform -chdir=infra plan
+        id: plan
+        run: terraform -chdir=infra plan -no-color > plan.txt
+      
+      - name: Comment PR with Terraform Plan
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const plan = fs.readFileSync('infra/plan.txt', 'utf8');
+
+            const body = `
+            ## Terraform Plan
+
+            <details>
+            <summary>Click to expand</summary>
+
+            \`\`\`
+            ${plan}
+            \`\`\`
+
+            </details>
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        run: terraform -chdir=infra apply -auto-approve
+        if: github.event_name == 'push'
+        run: |
+          terraform -chdir=infra apply \
+            -var="environment=${{  env.DEPLOY_ENV  }}" \
+            -auto-approve
 
       - name: Terraform Output
         id: tf-outputs
@@ -115,5 +150,5 @@ jobs:
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
-          app-name: cloudportfolio-prod-fn
+          app-name: cloudportfolio-${{  github.environment  }}-fn
           package: app/api
