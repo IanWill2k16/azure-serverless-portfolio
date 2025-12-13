@@ -110,6 +110,3 @@ jobs:
             --file functionapp.zip \
             --overwrite \
             --auth-mode login
-
-
-
