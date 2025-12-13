@@ -23,7 +23,7 @@ resource "azurerm_function_app_flex_consumption" "func" {
 
   app_settings = {
     AzureWebJobsStorage = "DefaultEndpointsProtocol=https;AccountName=${var.storage_name};AccountKey=${var.storage_access_key};EndpointSuffix=core.windows.net"
-    FUNCTIONS_WORKER_RUNTIME = "python"
+    FUNCTIONS_EXTENSION_VERSION = "~4"
   }
 
   site_config {}
