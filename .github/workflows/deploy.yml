@@ -72,6 +72,7 @@ jobs:
               --account-name ${{ needs.terraform.outputs.storage_account_name }} \
               --destination '$web' \
               --source app/web \
-              --overwrite
+              --overwrite \
+              --auth-mode login
 
 
