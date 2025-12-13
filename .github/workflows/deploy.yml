@@ -45,11 +45,13 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: terraform -chdir=infra apply -auto-approve
 
-  terraform:
+  web:
     name: "Web Page CI/CD"
     runs-on: ubuntu-latest
     
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Upload static site to Azure Storage
         uses: azure/cli@v2
         with:
