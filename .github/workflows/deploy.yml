@@ -50,7 +50,7 @@ jobs:
       - name: Terraform Output
         id: tf-outputs
         run: |
-          echo "module.storage.name=$(terraform -chdir=infra output -raw storage_account_name)" >> $GITHUB_OUTPUT
+          echo "storage_account_name=$(terraform -chdir=infra output -raw storage_account_name)" >> $GITHUB_OUTPUT
 
   web:
     name: "Web Page CI/CD"
