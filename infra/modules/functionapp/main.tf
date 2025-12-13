@@ -37,7 +37,7 @@ resource "azurerm_function_app_flex_consumption" "func" {
   site_config {
     cors {
       allowed_origins = [
-        "https://${var.storage_name}.web.core.windows.net"
+        "https://${var.storage_name}.z13.web.core.windows.net"
       ]
     }
   }
