@@ -56,7 +56,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const plan = fs.readFileSync('infra/plan.txt', 'utf8');
+            const plan = fs.readFileSync('./plan.txt', 'utf8');
 
             const body = `
             ## Terraform Plan
