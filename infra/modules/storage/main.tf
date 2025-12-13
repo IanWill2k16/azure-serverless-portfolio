@@ -20,6 +20,14 @@ resource "azurerm_role_assignment" "github_blob" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+resource "time_sleep" "rbac_propagation" {
+  triggers = {
+    role_assignment_id = azurerm_role_assignment.github_blob.id
+  }
+
+  create_duration = "30s"
+}
+
 resource "azurerm_storage_account_static_website" "website" {
   storage_account_id = azurerm_storage_account.sa.id
 
