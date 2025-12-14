@@ -6,3 +6,4 @@ variable "identity_id" {}
 variable "storage_access_key" {}
 variable "storage_blob_endpoint" {}
 variable "code_container_name" {}
+variable "static_site_url" {}

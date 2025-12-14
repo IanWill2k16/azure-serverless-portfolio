@@ -20,6 +20,11 @@ resource "azurerm_function_app_flex_consumption" "func" {
   location            = var.location
   service_plan_id     = azurerm_service_plan.this.id
 
+  identity {
+    type              = "UserAssigned"
+    identity_ids      = [var.identity_id]
+  }
+
   storage_container_type      = "blobContainer"
   storage_container_endpoint  = "${var.storage_blob_endpoint}${var.code_container_name}"
   storage_authentication_type = "StorageAccountConnectionString"
@@ -37,7 +42,7 @@ resource "azurerm_function_app_flex_consumption" "func" {
   site_config {
     cors {
       allowed_origins = [
-        "https://${var.storage_name}.z13.web.core.windows.net"
+        var.static_site_url
       ]
     }
   }
