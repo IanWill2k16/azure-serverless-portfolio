@@ -1,8 +1,8 @@
 import azure.functions as func
-import json
 from azure.data.tables import TableServiceClient
 from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import ResourceNotFoundError
+import json
 import os
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
