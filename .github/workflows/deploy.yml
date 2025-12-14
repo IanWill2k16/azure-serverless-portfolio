@@ -16,7 +16,7 @@ env:
 
 jobs:
   terraform-plan:
-    name: "Terraform Plan"
+    name: Terraform Plan
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 
