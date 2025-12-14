@@ -14,6 +14,11 @@ resource "azurerm_cosmosdb_account" "this" {
     name = "EnableServerless"
   }
 
+  geo_location {
+    location          = var.location
+    failover_priority = 0
+  }
+
   capabilities {
     name = "EnableTable"
   }
