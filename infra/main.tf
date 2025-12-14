@@ -22,6 +22,14 @@ module "storage" {
   resource_group_name = module.rg.name
 }
 
+module "cosmos" {
+  source              = "./modules/cosmos"
+  name_prefix         = local.name_prefix
+  location            = var.location
+  resource_group_name = module.rg.name
+  function_principal_id = module.func.principal_id
+}
+
 module "functionapp" {
   source              = "./modules/functionapp"
   name_prefix         = local.name_prefix
@@ -33,6 +41,8 @@ module "functionapp" {
   storage_blob_endpoint = module.storage.blob_endpoint
   code_container_name   = module.storage.code_container_name
   static_site_url       = module.storage.static_site_url
+  cosmos_account_name   = module.cosmos.account_name
+  cosmos_table_name     = module.cosmos.table_name
 }
 
 resource "azurerm_role_assignment" "identity_storage" {
