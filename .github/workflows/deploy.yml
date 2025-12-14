@@ -79,7 +79,7 @@ jobs:
 
   terraform-apply:
     name: Terraform Apply
-    runes-on: ubuntu-latest
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     environment: prod
 
