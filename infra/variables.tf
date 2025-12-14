@@ -14,6 +14,12 @@ variable "environment" {
   default     = "prod"
 }
 
-variable "oidc_client_id" {}
-variable "tenant_id" {}
-variable "subscription_id" {}
+variable "oidc_client_id" {
+  type        = string
+}
+variable "tenant_id" {
+  type        = string
+}
+variable "subscription_id" {
+  type        = string
+}
