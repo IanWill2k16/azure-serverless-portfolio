@@ -80,8 +80,11 @@ jobs:
   terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     environment: prod
+    if: github.event_name == 'push'
+    concurrency:
+      group: terraform-prod
+      cancel-in-progress: false
 
     permissions:
       contents: read
@@ -118,6 +121,7 @@ jobs:
           echo "function_app_url=$(terraform -chdir=infra output -raw function_app_url)" >> $GITHUB_OUTPUT
 
   web:
+    if: github.event_name == 'push'
     name: "Web Page CI/CD"
     runs-on: ubuntu-latest
     needs: terraform-apply
@@ -149,6 +153,7 @@ jobs:
               --auth-mode login
 
   api:
+    if: github.event_name == 'push'
     name: "API CI/CD"
     runs-on: ubuntu-latest
     needs: terraform-apply
