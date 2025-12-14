@@ -78,112 +78,112 @@ jobs:
               body
             });
 
-  terraform-apply:
-    name: Terraform Apply
-    runs-on: ubuntu-latest
-    environment: prod
-    if: github.event_name == 'push'
-    concurrency:
-      group: terraform-prod
-      cancel-in-progress: false
+  # terraform-apply:
+  #   name: Terraform Apply
+  #   runs-on: ubuntu-latest
+  #   environment: prod
+  #   if: github.event_name == 'push'
+  #   concurrency:
+  #     group: terraform-prod
+  #     cancel-in-progress: false
 
-    permissions:
-      contents: read
-      id-token: write
+  #   permissions:
+  #     contents: read
+  #     id-token: write
 
-    outputs:
-      storage_account_name: ${{ steps.tf-outputs.outputs.storage_account_name }}
-      function_app_url: ${{ steps.tf-outputs.outputs.function_app_url }}
+  #   outputs:
+  #     storage_account_name: ${{ steps.tf-outputs.outputs.storage_account_name }}
+  #     function_app_url: ${{ steps.tf-outputs.outputs.function_app_url }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v3
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     - name: Azure Login
+  #       uses: azure/login@v2
+  #       with:
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Terraform Init
-        run: terraform -chdir=infra init
+  #     - name: Terraform Init
+  #       run: terraform -chdir=infra init
 
-      - name: Terraform Apply
-        if: github.event_name == 'push'
-        run: terraform -chdir=infra apply -auto-approve
+  #     - name: Terraform Apply
+  #       if: github.event_name == 'push'
+  #       run: terraform -chdir=infra apply -auto-approve
 
-      - name: Terraform Output
-        id: tf-outputs
-        run: |
-          echo "storage_account_name=$(terraform -chdir=infra output -raw storage_account_name)" >> $GITHUB_OUTPUT
-          echo "function_app_url=$(terraform -chdir=infra output -raw function_app_url)" >> $GITHUB_OUTPUT
+  #     - name: Terraform Output
+  #       id: tf-outputs
+  #       run: |
+  #         echo "storage_account_name=$(terraform -chdir=infra output -raw storage_account_name)" >> $GITHUB_OUTPUT
+  #         echo "function_app_url=$(terraform -chdir=infra output -raw function_app_url)" >> $GITHUB_OUTPUT
 
-  web:
-    if: github.event_name == 'push'
-    name: "Web Page CI/CD"
-    runs-on: ubuntu-latest
-    needs: terraform-apply
+  # web:
+  #   if: github.event_name == 'push'
+  #   name: "Web Page CI/CD"
+  #   runs-on: ubuntu-latest
+  #   needs: terraform-apply
     
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     - name: Azure Login
+  #       uses: azure/login@v2
+  #       with:
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Inject API URL into frontend
-        run: |
-          sed -i "s|__API_BASE_URL__|https://${{ needs.terraform-apply.outputs.function_app_url }}|g" app/web/script.js
+  #     - name: Inject API URL into frontend
+  #       run: |
+  #         sed -i "s|__API_BASE_URL__|https://${{ needs.terraform-apply.outputs.function_app_url }}|g" app/web/script.js
 
-      - name: Upload static site to Azure Storage
-        uses: azure/cli@v2
-        with:
-          inlineScript: |
-            az storage blob upload-batch \
-              --account-name ${{ needs.terraform-apply.outputs.storage_account_name }} \
-              --destination '$web' \
-              --source app/web \
-              --overwrite \
-              --auth-mode login
+  #     - name: Upload static site to Azure Storage
+  #       uses: azure/cli@v2
+  #       with:
+  #         inlineScript: |
+  #           az storage blob upload-batch \
+  #             --account-name ${{ needs.terraform-apply.outputs.storage_account_name }} \
+  #             --destination '$web' \
+  #             --source app/web \
+  #             --overwrite \
+  #             --auth-mode login
 
-  api:
-    if: github.event_name == 'push'
-    name: "API CI/CD"
-    runs-on: ubuntu-latest
-    needs: terraform-apply
+  # api:
+  #   if: github.event_name == 'push'
+  #   name: "API CI/CD"
+  #   runs-on: ubuntu-latest
+  #   needs: terraform-apply
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     - name: Azure Login
+  #       uses: azure/login@v2
+  #       with:
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          cd app/api
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+  #     - name: Install dependencies
+  #       run: |
+  #         cd app/api
+  #         python -m pip install --upgrade pip
+  #         pip install -r requirements.txt --target=".python_packages/lib/site-packages"
 
-      - name: Deploy to Azure Functions
-        uses: Azure/functions-action@v1
-        with:
-          app-name: cloudportfolio-prod-fn
-          package: app/api
+  #     - name: Deploy to Azure Functions
+  #       uses: Azure/functions-action@v1
+  #       with:
+  #         app-name: cloudportfolio-prod-fn
+  #         package: app/api
