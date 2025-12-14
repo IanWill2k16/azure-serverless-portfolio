@@ -2,7 +2,7 @@ name: Deploy Infrastructure
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: ["main"]
   pull_request:
 
 permissions:
@@ -13,13 +13,12 @@ env:
   TF_VAR_oidc_client_id: ${{ secrets.AZURE_CLIENT_ID }}
   TF_VAR_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
   TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  DEPLOY_ENV: 'prod'
 
 jobs:
   terraform:
     name: "Terraform CI/CD"
     runs-on: ubuntu-latest
-    environment: ${{ github.DEPLOY_ENV }}
+    environment: prod
 
     outputs:
       storage_account_name: ${{ steps.tf-outputs.outputs.storage_account_name }}
@@ -41,7 +40,6 @@ jobs:
       - name: Terraform Init
         run: |
           terraform -chdir=infra init \
-          -backend-config="key=terraform-${{  env.DEPLOY_ENV  }}.tfstate"
 
       - name: Terraform Validate
         run: terraform -chdir=infra validate
@@ -80,10 +78,7 @@ jobs:
 
       - name: Terraform Apply
         if: github.event_name == 'push'
-        run: |
-          terraform -chdir=infra apply \
-            -var="environment=${{  env.DEPLOY_ENV  }}" \
-            -auto-approve
+        run: terraform -chdir=infra apply -auto-approve
 
       - name: Terraform Output
         id: tf-outputs
@@ -152,5 +147,5 @@ jobs:
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
-          app-name: cloudportfolio-${{  env.DEPLOY_ENV }}-fn
+          app-name: cloudportfolio-prod-fn
           package: app/api
