@@ -29,10 +29,11 @@ def visit(req: func.HttpRequest) -> func.HttpResponse:
 def get_table_client():
     account = os.environ["COSMOS_ACCOUNT_NAME"]
     table = os.environ["COSMOS_TABLE_NAME"]
+    key = os.environ["COSMOS_PRIMARY_KEY"]
 
     endpoint = f"https://{account}.table.cosmos.azure.com"
     credential = AzureNamedKeyCredential(account, key)
-    
+
     service = TableServiceClient(endpoint=endpoint, credential=credential)
     return service.get_table_client(table)
 
