@@ -5,3 +5,12 @@ output "account_name" {
 output "table_name" {
   value = azurerm_cosmosdb_table.visits.name
 }
+
+output "primary_key" {
+  value = azurerm_cosmosdb_account.this.primary_key
+  sensitive = true
+}
+
+output "table_endpoint" {
+  value = azurerm_cosmosdb_account.this.endpoint
+}

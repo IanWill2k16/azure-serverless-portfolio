@@ -43,6 +43,8 @@ module "functionapp" {
   static_site_url       = module.storage.static_site_url
   cosmos_account_name   = module.cosmos.account_name
   cosmos_table_name     = module.cosmos.table_name
+  cosmos_table_endpoint = module.cosmos.table_endpoint
+  cosmos_primary_key    = module.cosmos.primary_key
 }
 
 resource "azurerm_role_assignment" "identity_storage" {
