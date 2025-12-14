@@ -1,8 +1,9 @@
 import azure.functions as func
-import json
 from azure.data.tables import TableServiceClient
 from azure.identity import DefaultAzureCredential
+from azure.core.credentials import AzureNamedKeyCredential
 from azure.core.exceptions import ResourceNotFoundError
+import json
 import os
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
@@ -30,8 +31,8 @@ def get_table_client():
     table = os.environ["COSMOS_TABLE_NAME"]
 
     endpoint = f"https://{account}.table.cosmos.azure.com"
-    credential = DefaultAzureCredential()
-
+    credential = AzureNamedKeyCredential(account, key)
+    
     service = TableServiceClient(endpoint=endpoint, credential=credential)
     return service.get_table_client(table)
 

@@ -29,9 +29,3 @@ resource "azurerm_cosmosdb_table" "visits" {
   resource_group_name = var.resource_group_name
   account_name        = azurerm_cosmosdb_account.this.name
 }
-
-resource "azurerm_role_assignment" "func_cosmos" {
-  scope                = azurerm_cosmosdb_account.this.id
-  role_definition_name = "Cosmos DB Built-in Data Contributor"
-  principal_id         = var.function_principal_id
-}
