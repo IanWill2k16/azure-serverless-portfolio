@@ -85,7 +85,7 @@ jobs:
 
     permissions:
       contents: read
-      id-roken: write
+      id-token: write
 
     outputs:
       storage_account_name: ${{ steps.tf-outputs.outputs.storage_account_name }}
