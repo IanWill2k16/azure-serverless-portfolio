@@ -1,8 +1,6 @@
 import azure.functions as func
 import json
 
-# commenting for commit
-
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.function_name(name="hello")
