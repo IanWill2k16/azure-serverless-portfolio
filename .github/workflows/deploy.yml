@@ -81,6 +81,7 @@ jobs:
     name: Terraform Apply
     runs-on: ubuntu-latest
     environment: prod
+    if: github.event_name == 'push'
     concurrency:
       group: terraform-prod
       cancel-in-progress: false
