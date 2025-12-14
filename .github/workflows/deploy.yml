@@ -92,6 +92,7 @@ jobs:
 
     outputs:
       storage_account_name: ${{ steps.tf-outputs.outputs.storage_account_name }}
+      function_app_url: ${{ steps.tf-outputs.outputs.function_app_url }}
 
     steps:
       - name: Checkout
@@ -139,14 +140,14 @@ jobs:
 
       - name: Inject API URL into frontend
         run: |
-          sed -i "s|__API_BASE_URL__|https://${{ needs.terraform.outputs.function_app_url }}|g" app/web/script.js
+          sed -i "s|__API_BASE_URL__|https://${{ needs.terraform-apply.outputs.function_app_url }}|g" app/web/script.js
 
       - name: Upload static site to Azure Storage
         uses: azure/cli@v2
         with:
           inlineScript: |
             az storage blob upload-batch \
-              --account-name ${{ needs.terraform.outputs.storage_account_name }} \
+              --account-name ${{ needs.terraform-apply.outputs.storage_account_name }} \
               --destination '$web' \
               --source app/web \
               --overwrite \
