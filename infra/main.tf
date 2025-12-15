@@ -45,6 +45,14 @@ module "functionapp" {
   cosmos_primary_key    = module.cosmos.primary_key
 }
 
+module "cdn" {
+  source                     = "./modules/cdn"
+  name_prefix                = local.name_prefix
+  resource_group_name        = module.rg.name
+  storage_primary_web_host   = replace(module.storage.static_site_url, "https://", "")
+}
+
+
 resource "azurerm_role_assignment" "identity_storage" {
   scope                = module.storage.id
   role_definition_name = "Storage Blob Data Contributor"
