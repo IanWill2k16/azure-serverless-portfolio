@@ -27,7 +27,6 @@ module "cosmos" {
   name_prefix         = local.name_prefix
   location            = var.location
   resource_group_name = module.rg.name
-  function_principal_id = module.functionapp.principal_id
 }
 
 module "functionapp" {
