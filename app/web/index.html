@@ -1,12 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Azure Function + Static Site</title>
+    <meta charset="UTF-8" />
+    <title>Cloud Automation Portfolio</title>
     <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-    <h1>Azure Function + Static Site</h1>
-    <p id="response">Loading...</p>
+    <button id="theme-toggle" aria-label="Toggle dark mode">
+    🌙
+</button>
+    <div class="container">
+        <h1>Cloud Automation Portfolio</h1>
+        <h3><i>Serverless Azure infrastructure deployed with Terraform and GitHub Actions</i></h3>
+
+        <p id="response" class="counter">Loading visitor count…</p>
+
+        <p>
+            This site is a small serverless portfolio project deployed on Microsoft Azure.
+            The visitor counter is backed by an Azure Function and Cosmos DB Table API,
+            with all infrastructure defined in Terraform and deployed via GitHub Actions.
+        </p>
+
+        <ul>
+            <li>Static website hosted on Azure Storage</li>
+            <li>Python Azure Function API</li>
+            <li>Cosmos DB (Table API) backend</li>
+            <li>CI/CD using GitHub Actions and OIDC</li>
+        </ul>
+    </div>
 
     <script src="script.js"></script>
 </body>
