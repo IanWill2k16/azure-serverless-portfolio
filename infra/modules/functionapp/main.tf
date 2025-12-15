@@ -40,7 +40,6 @@ resource "azurerm_function_app_flex_consumption" "func" {
     COSMOS_ACCOUNT_NAME = var.cosmos_account_name
     COSMOS_TABLE_NAME   = var.cosmos_table_name
     COSMOS_PRIMARY_KEY    = var.cosmos_primary_key
-
   }
 
   site_config {
