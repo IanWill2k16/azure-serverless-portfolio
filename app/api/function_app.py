@@ -20,6 +20,7 @@ def get_table_client():
     account = os.environ["COSMOS_ACCOUNT_NAME"]
     table = os.environ["COSMOS_TABLE_NAME"]
     key = os.environ["COSMOS_PRIMARY_KEY"]
+    endpoint = os.environ["COSMOS_TABLE_ENDPOINT"]
 
     credential = AzureNamedKeyCredential(account, key)
 
