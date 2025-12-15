@@ -45,7 +45,8 @@ resource "azurerm_function_app_flex_consumption" "func" {
   site_config {
     cors {
       allowed_origins = [
-        var.static_site_url
+        var.static_site_url,
+        "https://ianwilliamson.dev"
       ]
     }
   }
