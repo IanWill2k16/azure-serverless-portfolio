@@ -21,8 +21,8 @@ resource "azurerm_function_app_flex_consumption" "func" {
   service_plan_id     = azurerm_service_plan.this.id
 
   identity {
-    type              = "UserAssigned"
-    identity_ids      = [var.identity_id]
+    type         = "UserAssigned"
+    identity_ids = [var.identity_id]
   }
 
   storage_container_type      = "blobContainer"
@@ -30,16 +30,16 @@ resource "azurerm_function_app_flex_consumption" "func" {
   storage_authentication_type = "StorageAccountConnectionString"
   storage_access_key          = var.storage_access_key
 
-  runtime_name        = "python"
-  runtime_version     = "3.11"
+  runtime_name    = "python"
+  runtime_version = "3.11"
 
   app_settings = {
-    AzureWebJobsStorage = "DefaultEndpointsProtocol=https;AccountName=${var.storage_name};AccountKey=${var.storage_access_key};EndpointSuffix=core.windows.net"
-    FUNCTIONS_EXTENSION_VERSION = "~4"
+    AzureWebJobsStorage                   = "DefaultEndpointsProtocol=https;AccountName=${var.storage_name};AccountKey=${var.storage_access_key};EndpointSuffix=core.windows.net"
+    FUNCTIONS_EXTENSION_VERSION           = "~4"
     APPLICATIONINSIGHTS_CONNECTION_STRING = azurerm_application_insights.ai.connection_string
-    COSMOS_ACCOUNT_NAME = var.cosmos_account_name
-    COSMOS_TABLE_NAME   = var.cosmos_table_name
-    COSMOS_PRIMARY_KEY    = var.cosmos_primary_key
+    COSMOS_ACCOUNT_NAME                   = var.cosmos_account_name
+    COSMOS_TABLE_NAME                     = var.cosmos_table_name
+    COSMOS_PRIMARY_KEY                    = var.cosmos_primary_key
   }
 
   site_config {

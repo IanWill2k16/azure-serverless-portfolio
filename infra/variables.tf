@@ -5,21 +5,21 @@ variable "project_name" {
 }
 
 variable "location" {
-  type        = string
-  default     = "eastus"
+  type    = string
+  default = "eastus"
 }
 
 variable "environment" {
-  type        = string
-  default     = "prod"
+  type    = string
+  default = "prod"
 }
 
 variable "oidc_client_id" {
-  type        = string
+  type = string
 }
 variable "tenant_id" {
-  type        = string
+  type = string
 }
 variable "subscription_id" {
-  type        = string
+  type = string
 }
