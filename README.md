@@ -41,6 +41,7 @@ This mirrors real-world production tradeoffs rather than tutorial-style scaffold
 ├── function_app/       # Azure Functions (Python)
 ├── site/               # Static website assets
 └── .github/workflows/  # CI/CD pipelines
+```
 
 ---
 
@@ -73,4 +74,5 @@ This mirrors real-world production tradeoffs rather than tutorial-style scaffold
 ## Future Improvements
 - Migrate static hosting to Azure Static Web Apps
 - Add monitoring and alerting
+
 - Expand API surface for additional features
