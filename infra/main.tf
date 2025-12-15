@@ -1,11 +1,11 @@
 locals {
-  name_prefix =        "${var.project_name}-${var.environment}"
+  name_prefix = "${var.project_name}-${var.environment}"
 }
 
 module "rg" {
-  source              = "./modules/resource_group"
-  name_prefix         = local.name_prefix
-  location            = var.location
+  source      = "./modules/resource_group"
+  name_prefix = local.name_prefix
+  location    = var.location
 }
 
 module "identity" {
@@ -30,13 +30,13 @@ module "cosmos" {
 }
 
 module "functionapp" {
-  source              = "./modules/functionapp"
-  name_prefix         = local.name_prefix
-  location            = var.location
-  resource_group_name = module.rg.name
-  storage_name        = module.storage.name
-  identity_id         = module.identity.id
-  storage_access_key  = module.storage.access_key
+  source                = "./modules/functionapp"
+  name_prefix           = local.name_prefix
+  location              = var.location
+  resource_group_name   = module.rg.name
+  storage_name          = module.storage.name
+  identity_id           = module.identity.id
+  storage_access_key    = module.storage.access_key
   storage_blob_endpoint = module.storage.blob_endpoint
   code_container_name   = module.storage.code_container_name
   static_site_url       = module.storage.static_site_url
@@ -49,5 +49,5 @@ resource "azurerm_role_assignment" "identity_storage" {
   scope                = module.storage.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = module.identity.principal_id
-  depends_on            = [module.storage]
+  depends_on           = [module.storage]
 }

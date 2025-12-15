@@ -7,6 +7,6 @@ output "table_name" {
 }
 
 output "primary_key" {
-  value = azurerm_cosmosdb_account.this.primary_key
+  value     = azurerm_cosmosdb_account.this.primary_key
   sensitive = true
 }
