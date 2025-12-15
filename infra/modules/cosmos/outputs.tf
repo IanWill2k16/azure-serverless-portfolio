@@ -12,5 +12,5 @@ output "primary_key" {
 }
 
 output "table_endpoint" {
-  value = azurerm_cosmosdb_account.this.endpoint
+  value = azurerm_cosmosdb_account.this.table_endpoint
 }
