@@ -9,5 +9,4 @@ variable "code_container_name" {}
 variable "static_site_url" {}
 variable "cosmos_account_name" {}
 variable "cosmos_table_name" {}
-variable "cosmos_table_endpoint" {}
 variable "cosmos_primary_key" {}

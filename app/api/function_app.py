@@ -24,6 +24,7 @@ def get_table_client():
 
     credential = AzureNamedKeyCredential(account, key)
 
+    endpoint = f"https://{account}.table.cosmos.azure.com"
     service = TableServiceClient(endpoint=endpoint, credential=credential)
     return service.get_table_client(table)
 
