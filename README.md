@@ -1,78 +1,105 @@
-# Cloud Automation Portfolio
+# Azure Serverless Portfolio
 
-A small but production-grade serverless portfolio project deployed on Microsoft Azure using Terraform and GitHub Actions.
+## Overview
 
-This project demonstrates infrastructure automation, identity-based CI/CD, and serverless application design rather than frontend complexity.
+This repository contains a small, production-style serverless portfolio application deployed on Microsoft Azure. The project demonstrates how to provision and operate a complete cloud-native workload using infrastructure as code, event-driven compute, and automated CI/CD.
 
----
-
-## Architecture Overview
-
-The system consists of:
-
-- Static website hosted on Azure Storage
-- Serverless API implemented with Azure Functions (Python)
-- Cosmos DB (Table API) used as a simple persistence layer
-- Infrastructure as Code using Terraform modules
-- CI/CD pipeline using GitHub Actions with OIDC (no long-lived secrets)
-
-A visitor counter on the site exercises the full request path end-to-end.
+The application itself is intentionally simple: a static website with a visitor counter backed by an Azure Function and Cosmos DB. The focus of the project is on architecture, automation, security boundaries, and deployment patterns rather than application complexity.
 
 ---
 
-## Key Design Decisions
+## Architecture
 
-- Terraform modules are used to keep infrastructure composable and readable
-- OIDC authentication is used for GitHub Actions instead of service principals with secrets
-- RBAC-based access is preferred over account keys where supported
-- Minimal frontend to keep the focus on cloud automation rather than UI work
+**High-level flow:**
 
-This mirrors real-world production tradeoffs rather than tutorial-style scaffolding.
+1. A static website is hosted using Azure Storage Static Website hosting.
+2. Client-side JavaScript calls a public HTTP-triggered Azure Function.
+3. The Azure Function increments and retrieves a counter stored in Cosmos DB (Table API).
+4. The updated count is returned to the frontend and rendered on the page.
+
+All infrastructure is provisioned with Terraform and deployed automatically using GitHub Actions with OIDC authentication.
+
+---
+
+## Components
+
+### Frontend
+
+* Static HTML, CSS, and JavaScript
+* Hosted on Azure Storage Static Website
+* API endpoint injected at deploy time
+* Light/dark theme toggle with local preference storage
+
+### Backend API
+
+* Python Azure Function (HTTP trigger)
+* Stateless function execution
+* Cosmos DB Table API used for simple key-value persistence
+
+### Data Layer
+
+* Azure Cosmos DB (Serverless, Table API)
+* Single table storing a global visitor counter
+* Designed for low operational overhead
+
+### Infrastructure
+
+* Terraform-managed Azure resources
+* Modular Terraform design
+* Remote Terraform state stored in Azure Storage
+* Azure-managed identities used for resource access
+
+---
+
+## CI/CD
+
+GitHub Actions is used to fully automate provisioning and deployment:
+
+* **Pull Requests**
+
+  * Terraform init, validate, and plan
+  * Terraform plan output posted as a PR comment
+
+* **Main Branch Pushes**
+
+  * Terraform apply to provision or update infrastructure
+  * Frontend assets uploaded to Azure Storage
+  * Azure Function packaged and deployed
+
+Authentication to Azure is handled using OIDC. No static cloud credentials are stored in the repository.
+
+---
+
+## Security Considerations
+
+* No secrets are committed to source control
+* Azure authentication uses OIDC and Managed Identities
+* Sensitive Terraform outputs are marked appropriately
+* CORS restrictions limit API access to the deployed static site
 
 ---
 
 ## Repository Structure
 
-```text
-/
-├── infra/              # Terraform root
-│   ├── modules/        # Reusable Terraform modules
-│   └── environments/   # Environment-specific configuration
-├── function_app/       # Azure Functions (Python)
-├── site/               # Static website assets
-└── .github/workflows/  # CI/CD pipelines
+```
+azure-serverless-portfolio/
+├── app/
+│   ├── web/            # Static frontend
+│   └── api/            # Azure Function (Python)
+├── infra/              # Terraform infrastructure
+│   └── modules/        # Reusable Terraform modules
+└── .github/            # GitHub Actions workflows
 ```
 
 ---
 
-## Deployment Flow
+## Purpose
 
-- Code is pushed to the repository
-- GitHub Actions authenticates to Azure using OIDC
-- Terraform plans and applies infrastructure changes
-- Application code is deployed to Azure Functions
-- Static site is updated
+This repository is intended as a reference implementation demonstrating:
 
----
+* Serverless application architecture on Azure
+* End-to-end automation using Terraform and GitHub Actions
+* Secure, credential-free CI/CD with OIDC
+* Clean separation between application code and infrastructure
 
-## What This Project Is (and Isn’t)
-
-### This is:
-
-- A realistic cloud automation exercise
-- A demonstration of IaC, CI/CD, and serverless patterns
-- Intentionally small but end-to-end
-
-### This is not:
-
-- A frontend design showcase
-- A tutorial copy/paste project
-- A production SaaS
-
----
-
-## Future Improvements
-- Migrate static hosting to Azure Static Web Apps
-- Add monitoring and alerting
-
-- Expand API surface for additional features
+The project favors clarity, safety, and maintainability over feature depth.
